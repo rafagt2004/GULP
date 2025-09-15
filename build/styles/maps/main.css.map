@@ -1,0 +1,1 @@
+{"version":3,"sources":["main.scss","variaves.scss"],"names":[],"mappings":"AAEA;EACI,kBCHQ","sourcesContent":["@use 'variaves';\r\n\r\nbody {\r\n    background-color: variaves.$cor-fundo;\r\n}","$cor-fundo: #c23131;"],"file":"../main.css"}

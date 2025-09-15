@@ -1,0 +1,5 @@
+@use 'variaves';
+
+body {
+    background-color: variaves.$cor-fundo;
+}
