@@ -1,6 +1,22 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify');
+const obfuscate = require('gulp-obfuscate');
+const imagemin = require('gulp-imagemin');
+
+function comprimeIMG(){
+    return gulp.src('./source/images/*')
+        .pipe(imagemin())
+        .pipe(gulp.dest('./build/images'));
+}
+
+function comprimeJS(){
+    return gulp.src('./source/scripts/*.js')
+        .pipe(uglify())
+        .pipe(obfuscate())
+        .pipe(gulp.dest('./build/scripts'));
+}
 
 function compilaSass(){
     return gulp.src('./source/styles/main.scss')
@@ -40,12 +56,8 @@ function dizTchau(){
 // pois no arquivo gulpfile.js não existe uma função para o exports.default.
 
 
-exports.default = gulp.series(funcaoPadrao, dizOi); //As tarefas executadas de forma serial fazem com que o Gulp aguarde uma tarefa terminar para executar a próxima, o que é útil quando temos um processo que depende de outro.  Por exemplo, depois de comprimir imagens, se precisarmos redimensioná-las, seria necessário aguardar a compressão dos arquivos, afinal não teríamos muito ganho em redimensionar as imagens antes de comprimi-las.
-exports.parallel = gulp.parallel(funcaoPadrao, dizOi); //As tarefas executadas de forma paralela serão iniciadas no mesmo instante, porém todo o fluxo de execução irá aguardar o término de todas as tarefas para concluir. Esse tipo de execução é interessante quando temos tarefas pesadas e independentes, por exemplo, a compressão de imagens e compilação do SASS. Comprimir imagens é mais demorada que compilar o SASS, logo essas duas tarefas que não estão relacionadas podem ser executadas de forma paralela.
-
-exports.sass = compilaSass;
-exports.dizOi = dizOi;
-
-exports.watch = function(){
+exports.default = function(){
     gulp.watch('./source/styles/*.scss', {ignoreInitial: false}, gulp.series(compilaSass));
+    gulp.watch('./source/scripts/*.js', {ignoreInitial: false}, gulp.series(comprimeJS));
+    gulp.watch('./source/images/*', {ignoreInitial: false}, gulp.series(comprimeIMG));
 }
